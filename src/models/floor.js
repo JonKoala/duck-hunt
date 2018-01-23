@@ -4,7 +4,7 @@ export default class extends Printable {
 
   constructor() {
     super();
-    this.print = '  '
+    this._sprite = '  ';
   }
 
 }
