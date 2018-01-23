@@ -1,0 +1,15 @@
+{
+  "name": "duck-hunt",
+  "version": "0.1.0",
+  "description": "a url based duck hunt game",
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --open"
+  },
+  "author": "JonKoala",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.0"
+  }
+}
