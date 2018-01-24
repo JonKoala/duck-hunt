@@ -1,29 +1,35 @@
-import utils from './utils.js'
-
-import Floor from './models/floor'
+import Map from './models/map'
 import Mark from './models/mark';
 import Duck from './models/duck'
 
-var mapLength = 80;
-var maxDucks = 5;
-var defaultMap = Array.from(Array(mapLength)).map(() => new Floor());
+import utils from './utils.js'
 
-var map = [];
+
+// start assets
+
+var mapLength = 50;
+var maxDucks = 5;
+
+var map = new Map(mapLength);
 var ducks = [];
 var mark = {};
 
 var controller = {};
 
+
+start();
+
+
+// game routine logic
+
 function start() {
 
-  // start ducks
+  // start the game objects
   for (let i=0; i<=maxDucks; i++) {
     let position = utils.getRandomNumber(0, mapLength-1);
     let orientation = utils.getRandomNumber(0, 1) ? 1 : -1;
     ducks.push(new Duck(position, orientation));
   }
-
-  // start mark
   mark = new Mark(0);
 
   // start looking for events
@@ -45,18 +51,16 @@ function loop() {
 function print() {
 
   // reset map
-  map = defaultMap.slice(0);
+  map.reset();
 
-  // add ducks to map
+  // add game objects
   ducks.forEach(duck => {
-    map[duck.position] = duck;
+    map.addGameObject(duck);
   });
-
-  // add mark to map
-  map[mark.position] = mark;
+  map.addGameObject(mark);
 
   // update url
-  location.hash = map.join('');
+  location.hash = map;
 }
 
 function keyHandler(event) {
@@ -65,5 +69,3 @@ function keyHandler(event) {
 	if (event.key === 'ArrowLeft' && mark.position > 0)
 		mark.move(-1);
 }
-
-start();
