@@ -10,12 +10,10 @@ import utils from './utils.js'
 var mapLength = 50;
 var maxDucks = 5;
 
+var turnCount = 0;
 var map = new Map(mapLength);
 var ducks = [];
 var mark = {};
-
-var controller = {};
-
 
 start();
 
@@ -38,7 +36,16 @@ function start() {
   loop();
 }
 
-function loop() {
+function loop(timeStamp) {
+  turnCount++;
+
+  // ducks moviment logic
+  ducks.forEach(function(duck, index, origin) {
+    var otherDucks = origin.slice(0);
+    otherDucks.splice(index, 1);
+
+    duck.update(turnCount, otherDucks, mapLength);
+  });
 
   // check if there is a target in sight
   mark.target = ducks.find(duck => duck.position === mark.position);

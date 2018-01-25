@@ -17,7 +17,11 @@ export default class extends Printable {
 
   move(orientation, units = 1) {
     this.orientation = orientation;
-    this.position += orientation * units;
+    this.position = this._getNewPosition(orientation, units);
+  }
+
+  _getNewPosition(orientation, units) {
+    return this.position + (orientation * units);
   }
 
 }
