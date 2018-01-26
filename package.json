@@ -4,7 +4,8 @@
   "description": "a url based duck hunt game",
   "main": "app.js",
   "scripts": {
-    "dev": "webpack-dev-server --open"
+    "dev": "webpack-dev-server --open",
+    "build": "webpack --progress"
   },
   "author": "JonKoala",
   "license": "MIT",
