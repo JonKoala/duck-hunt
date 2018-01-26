@@ -39,7 +39,8 @@ function start() {
 function loop(timeStamp) {
   turnCount++;
 
-  // ducks moviment logic
+  // update game objects
+
   ducks.forEach(function(duck, index, origin) {
     var otherDucks = origin.slice(0);
     otherDucks.splice(index, 1);
@@ -47,8 +48,7 @@ function loop(timeStamp) {
     duck.update(turnCount, otherDucks, mapLength);
   });
 
-  // check if there is a target in sight
-  mark.target = ducks.find(duck => duck.position === mark.position);
+  mark.update(ducks);
 
   print();
 
@@ -61,9 +61,7 @@ function print() {
   map.reset();
 
   // add game objects
-  ducks.forEach(duck => {
-    map.addGameObject(duck);
-  });
+  ducks.forEach(duck => map.addGameObject(duck));
   map.addGameObject(mark);
 
   // update url
@@ -75,4 +73,6 @@ function keyHandler(event) {
 		mark.move(1)
 	if (event.key === 'ArrowLeft' && mark.position > 0)
 		mark.move(-1);
+  if (event.key === ' ')
+    mark.shoot(ducks);
 }
