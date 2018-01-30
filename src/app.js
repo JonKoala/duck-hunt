@@ -2,7 +2,8 @@ import Map from './models/map'
 import Mark from './models/mark';
 import Duck from './models/duck'
 
-import utils from './utils.js'
+import utils from './utils'
+import inputHandler from './inputHandler'
 
 
 // start assets
@@ -11,7 +12,7 @@ var mapLength = 50;
 var maxDucks = 5;
 
 var turnCount = 0;
-var map = new Map(mapLength);
+var map = {};
 var ducks = [];
 var mark = {};
 
@@ -23,6 +24,7 @@ start();
 function start() {
 
   // start the game objects
+  map = new Map(mapLength);
   for (let i=0; i<=maxDucks; i++) {
     let position = utils.getRandomNumber(0, mapLength-1);
     let orientation = utils.getRandomNumber(0, 1) ? 1 : -1;
@@ -30,8 +32,9 @@ function start() {
   }
   mark = new Mark(0);
 
-  // start looking for events
-  document.addEventListener('keydown', keyHandler);
+  // handle user inputs
+  inputHandler.addEventListener('move', onUserMove);
+  inputHandler.addEventListener('shoot', onUserShoot);
 
   loop();
 }
@@ -68,11 +71,15 @@ function print() {
   location.hash = map;
 }
 
-function keyHandler(event) {
-	if (event.key === 'ArrowRight' && mark.position < mapLength)
-		mark.move(1)
-	if (event.key === 'ArrowLeft' && mark.position > 0)
-		mark.move(-1);
-  if (event.key === ' ')
-    mark.shoot(ducks);
+
+// handle input events
+
+function onUserMove(e) {
+  var nextPosition = mark.predictPosition(e.direction);
+  if (nextPosition >= 0 && nextPosition <= mapLength)
+    mark.move(e.direction);
+}
+
+function onUserShoot() {
+  mark.shoot(ducks);
 }

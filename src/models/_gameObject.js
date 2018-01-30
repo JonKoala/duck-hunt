@@ -17,10 +17,10 @@ export default class extends Printable {
 
   move(orientation, units = 1) {
     this.orientation = orientation;
-    this.position = this._getNewPosition(orientation, units);
+    this.position = this.predictPosition(orientation, units);
   }
 
-  _getNewPosition(orientation, units) {
+  predictPosition(orientation, units = 1) {
     return this.position + (orientation * units);
   }
 

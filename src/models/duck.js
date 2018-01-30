@@ -28,7 +28,7 @@ export default class extends GameObject {
       // define new position
       var orientation = utils.getRandomNumber(0, 1) ? 1 : -1;
       var moviment = utils.getRandomNumber(0, 1);
-      var newPosition = this._getNewPosition(orientation, moviment);
+      var newPosition = this.predictPosition(orientation, moviment);
 
       // if possible, move to new position
       if (newPosition > 0 && newPosition < mapLength) {
