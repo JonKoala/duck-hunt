@@ -9,13 +9,13 @@ export default class extends GameObject {
     this.cooldownCount = 0;
 
     this.spritesheet = ['(  )', '(2)', '(S)', '(x)'];
-    this.state = 0;
+    this.spriteIndex = 0;
   }
 
   update(ducks) {
 
     // won't do anything if still in cooldown
-    if (this.state === 3 && this.turnsToCooldown > this.cooldownCount) {
+    if (this.spriteIndex === 3 && this.turnsToCooldown > this.cooldownCount) {
       this.cooldownCount++;
       return;
     }
@@ -25,15 +25,15 @@ export default class extends GameObject {
 
   set target(target) {
     if (target)
-      this.state = (target.orientation > 0) ? 2 : 1;
+      this.spriteIndex = (target.orientation > 0) ? 2 : 1;
     else
-      this.state = 0;
+      this.spriteIndex = 0;
   }
 
   shoot(ducks, map) {
 
     // won't do anything if still in cooldown
-    if (this.state === 3)
+    if (this.spriteIndex === 3)
       return;
 
     // kill a duck, if it's in sight
@@ -42,7 +42,7 @@ export default class extends GameObject {
       ducks.splice(targetIndex, 1);
 
     // start weapon cooldown
-    this.state = 3;
+    this.spriteIndex = 3;
     this.cooldownCount = 0;
   }
 

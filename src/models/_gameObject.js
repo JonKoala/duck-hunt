@@ -7,12 +7,12 @@ export default class extends Printable {
 
     this.position = position;
 
-    this.state = 0;
+    this.spriteIndex = 0;
     this.spritesheet = [];
   }
 
   get sprite() {
-    return this.spritesheet[this.state];
+    return this.spritesheet[this.spriteIndex];
   }
 
   move(orientation, units = 1) {

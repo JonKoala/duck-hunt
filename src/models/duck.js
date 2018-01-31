@@ -14,7 +14,7 @@ export default class extends GameObject {
 
   set orientation(value) {
     this._orientation = value;
-    this.state = (this.orientation > 0) ? 1 : 0;
+    this.spriteIndex = (this.orientation > 0) ? 1 : 0;
   }
 
   get orientation() {
