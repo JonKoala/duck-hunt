@@ -27,8 +27,7 @@ function start() {
   map = new Map(mapLength);
   for (let i=0; i<=maxDucks; i++) {
     let position = utils.getRandomNumber(0, mapLength-1);
-    let orientation = utils.getRandomNumber(0, 1) ? 1 : -1;
-    ducks.push(new Duck(position, orientation));
+    ducks.push(new Duck(position));
   }
   mark = new Mark(0);
 
@@ -45,10 +44,25 @@ function loop(timeStamp) {
   // update game objects
 
   ducks.forEach(function(duck, index, origin) {
-    var otherDucks = origin.slice(0);
-    otherDucks.splice(index, 1);
+    if (duck.state === 'walking') {
 
-    duck.update(turnCount, otherDucks, mapLength);
+      // predict duck's next moviment
+      let nextOrientation = duck.getNextOrientation();
+      let nextMoviment = duck.getNextMoviment();
+      let nextPosition = duck.predictPosition(nextOrientation, nextMoviment);
+
+      // check collision with other ducks
+      let otherDucks = origin.slice(0);
+      otherDucks.splice(index, 1);
+      let willCollide = otherDucks.some(duck => duck.position === nextPosition);
+
+      // change moviment, if necessary
+      if (nextPosition < 0 || nextPosition > mapLength || willCollide)
+        nextMoviment = 0;
+
+      duck.move(nextOrientation, nextMoviment);
+    }
+    duck.update();
   });
 
   mark.update(ducks);

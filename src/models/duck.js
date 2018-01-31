@@ -3,41 +3,66 @@ import utils from '../utils'
 
 export default class extends GameObject {
 
-  constructor(position, orientation) {
+  constructor(position) {
     super(position);
 
-    this.turnsToMove = 30;
+    this.idleTurns = 30;
+    this.states = ['idle', 'walking'];
+    this.changeState(this._getRandState());
 
     this.spritesheet = ['2', 'S'];
-    this.orientation = orientation;
+    this.orientation = this.getNextOrientation();
   }
 
-  set orientation(value) {
-    this._orientation = value;
+
+  // routine
+
+  update() {
     this.spriteIndex = (this.orientation > 0) ? 1 : 0;
+    this.behaviour();
   }
 
-  get orientation() {
-    return this._orientation;
-  }
 
-  update(turnCount, ducks, mapLength) {
+  // state management
 
-    if (turnCount % this.turnsToMove === 0) {
+  changeState(state) {
+    this.state = state;
 
-      // define new position
-      var orientation = utils.getRandomNumber(0, 1) ? 1 : -1;
-      var moviment = utils.getRandomNumber(0, 1);
-      var newPosition = this.predictPosition(orientation, moviment);
-
-      // if possible, move to new position
-      if (newPosition > 0 && newPosition < mapLength) {
-        var isPositionTaken = ducks.some(duck => duck.position === newPosition);
-        if (!isPositionTaken)
-          this.move(orientation, moviment);
-      }
+    switch(state) {
+      case 'idle':
+        this.idleTurnsCount = 0;
+        this.behaviour = this.idleBehaviour;
+        break;
+      case 'walking':
+        this.behaviour = this.walkBehaviour;
+        break;
     }
+  }
 
+  idleBehaviour() {
+    this.idleTurnsCount++;
+    if (this.idleTurns <= this.idleTurnsCount)
+      this.changeState('walking');
+  }
+
+  walkBehaviour() {
+    this.changeState('idle');
+  }
+
+
+  // AI
+
+  getNextOrientation() {
+    return utils.getRandomNumber(0, 1) ? 1 : -1;
+  }
+
+  getNextMoviment() {
+    return utils.getRandomNumber(0, 1);
+  }
+
+  _getRandState() {
+    var randIndex = utils.getRandomNumber(0, 1);
+    return this.states[randIndex];
   }
 
 }
