@@ -5,45 +5,60 @@ export default class extends GameObject {
   constructor(position) {
     super(position);
 
-    this.turnsToCooldown = 20;
-    this.cooldownCount = 0;
+    this.cooldownTurns = 20;
+    this.states = ['normal', 'cooldown'];
+    this.changeState('normal');
+
+    this.target = null;
 
     this.spritesheet = ['(  )', '(2)', '(S)', '(x)'];
     this.spriteIndex = 0;
   }
 
-  update(ducks) {
 
-    // won't do anything if still in cooldown
-    if (this.spriteIndex === 3 && this.turnsToCooldown > this.cooldownCount) {
-      this.cooldownCount++;
-      return;
-    }
+  // routine
 
-    this.target = ducks.find(duck => duck.position === this.position);
+  update() {
+    this.behaviour();
   }
 
-  set target(target) {
-    if (target)
-      this.spriteIndex = (target.orientation > 0) ? 2 : 1;
+
+  // state management
+
+  changeState(state) {
+    this.state = state;
+
+    switch(state) {
+      case 'normal':
+        this.behaviour = this.normalBehaviour;
+        break;
+      case 'cooldown':
+        this.cooldownTurnsCount = 0;
+        this.behaviour = this.cooldownBehaviour;
+        break;
+    }
+  }
+
+  normalBehaviour() {
+    if (this.target)
+      this.spriteIndex = (this.target.orientation > 0) ? 2 : 1;
     else
       this.spriteIndex = 0;
   }
 
-  shoot(ducks, map) {
-
-    // won't do anything if still in cooldown
-    if (this.spriteIndex === 3)
-      return;
-
-    // kill a duck, if it's in sight
-    var targetIndex = ducks.findIndex(duck => duck.position === this.position);
-    if (targetIndex >= 0)
-      ducks.splice(targetIndex, 1);
-
-    // start weapon cooldown
+  cooldownBehaviour() {
     this.spriteIndex = 3;
-    this.cooldownCount = 0;
+
+    this.cooldownTurnsCount++;
+    if (this.cooldownTurns <= this.cooldownTurnsCount)
+      this.changeState('normal');
+  }
+
+
+  // events
+
+  shoot() {
+    this.changeState('cooldown');
   }
 
 }

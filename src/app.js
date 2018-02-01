@@ -11,7 +11,6 @@ import inputHandler from './inputHandler'
 var mapLength = 50;
 var maxDucks = 5;
 
-var turnCount = 0;
 var map = {};
 var ducks = [];
 var mark = {};
@@ -39,10 +38,8 @@ function start() {
 }
 
 function loop(timeStamp) {
-  turnCount++;
 
-  // update game objects
-
+  // update ducks
   ducks.forEach(function(duck, index, origin) {
     if (duck.state === 'walking') {
 
@@ -65,7 +62,9 @@ function loop(timeStamp) {
     duck.update();
   });
 
-  mark.update(ducks);
+  // update mark
+  mark.target = ducks.find(duck => duck.position === mark.position);
+  mark.update();
 
   print();
 
@@ -95,5 +94,14 @@ function onUserMove(e) {
 }
 
 function onUserShoot() {
-  mark.shoot(ducks);
+
+  // won't do anything if still in cooldown
+  if (mark.state === 'cooldown')
+    return;
+
+  mark.shoot();
+
+  // kill a duck, if it's in sight
+  if (mark.target)
+    ducks.splice(ducks.indexOf(mark.target), 1);
 }
