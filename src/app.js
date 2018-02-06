@@ -1,18 +1,16 @@
 import Map from './models/map'
 import Mark from './models/mark';
-import Duck from './models/duck'
 
-import utils from './utils'
 import inputHandler from './inputHandler'
+import duckHandler from './duckHandler'
 
 
 // start assets
 
 var mapLength = 50;
-var maxDucks = 5;
+var numDucks = 5;
 
 var map = {};
-var ducks = [];
 var mark = {};
 
 start();
@@ -24,11 +22,8 @@ function start() {
 
   // start the game objects
   map = new Map(mapLength);
-  for (let i=0; i<=maxDucks; i++) {
-    let position = utils.getRandomNumber(0, mapLength-1);
-    ducks.push(new Duck(position));
-  }
   mark = new Mark(0);
+  duckHandler.start(numDucks, mapLength);
 
   // handle user inputs
   inputHandler.addEventListener('move', onUserMove);
@@ -39,31 +34,9 @@ function start() {
 
 function loop(timeStamp) {
 
-  // update ducks
-  ducks.forEach(function(duck, index, origin) {
-    if (duck.state === 'walking') {
-
-      // predict duck's next moviment
-      let nextOrientation = duck.getNextOrientation();
-      let nextMoviment = duck.getNextMoviment();
-      let nextPosition = duck.predictPosition(nextOrientation, nextMoviment);
-
-      // check collision with other ducks
-      let otherDucks = origin.slice(0);
-      otherDucks.splice(index, 1);
-      let willCollide = otherDucks.some(duck => duck.position === nextPosition);
-
-      // change moviment, if necessary
-      if (nextPosition < 0 || nextPosition > mapLength || willCollide)
-        nextMoviment = 0;
-
-      duck.move(nextOrientation, nextMoviment);
-    }
-    duck.update();
-  });
-
-  // update mark
-  mark.target = ducks.find(duck => duck.position === mark.position);
+  // update game objects
+  duckHandler.updateDucks();
+  mark.target = duckHandler.locateDuck(mark.position);
   mark.update();
 
   print();
@@ -77,7 +50,7 @@ function print() {
   map.reset();
 
   // add game objects
-  ducks.forEach(duck => map.addGameObject(duck));
+  duckHandler.ducks.forEach(duck => map.addGameObject(duck));
   map.addGameObject(mark);
 
   // update url
@@ -103,5 +76,5 @@ function onUserShoot() {
 
   // kill a duck, if it's in sight
   if (mark.target)
-    ducks.splice(ducks.indexOf(mark.target), 1);
+    duckHandler.killDuck(mark.target);
 }
