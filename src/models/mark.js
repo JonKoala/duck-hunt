@@ -2,24 +2,18 @@ import GameObject from './_gameObject'
 
 export default class extends GameObject {
 
-  constructor(position) {
-    super(position);
-
-    this.cooldownTurns = 20;
-    this.states = ['normal', 'cooldown'];
-    this.changeState('normal');
-
-    this.target = null;
-
-    this.spritesheet = ['(  )', '(2)', '(S)', '(x)'];
-    this.spriteIndex = 0;
+  static get spritesheet() {
+    return ['(  )', '(2)', '(S)', '(x)'];
   }
 
+  static get states() {
+    return ['normal', 'cooldown'];
+  }
 
-  // routine
+  constructor(position) {
+    super(position, 0, 'normal');
 
-  update() {
-    this.behaviour();
+    this.cooldownTurns = 20;
   }
 
 

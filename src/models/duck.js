@@ -3,30 +3,34 @@ import utils from '../utils'
 
 export default class extends GameObject {
 
-  constructor(position) {
-    super(position);
+
+  static get spritesheet() {
+    return ['2', 'S'];
+  }
+
+  static get states() {
+    return ['idle', 'walking'];
+  }
+
+  constructor(position, orientation, state) {
+    super(position, orientation, state);
 
     this.idleTurns = 30;
-    this.states = ['idle', 'walking'];
-    this.changeState(this._getRandState());
-
-    this.spritesheet = ['2', 'S'];
-    this.orientation = this.getNextOrientation();
   }
 
 
   // routine
 
   update() {
+    super.update();
     this.spriteIndex = (this.orientation > 0) ? 1 : 0;
-    this.behaviour();
   }
 
 
   // state management
 
   changeState(state) {
-    this.state = state;
+    super.changeState(state);
 
     switch(state) {
       case 'idle':
@@ -47,22 +51,6 @@ export default class extends GameObject {
 
   walkBehaviour() {
     this.changeState('idle');
-  }
-
-
-  // AI
-
-  getNextOrientation() {
-    return utils.getRandomNumber(0, 1) ? 1 : -1;
-  }
-
-  getNextMoviment() {
-    return utils.getRandomNumber(0, 1);
-  }
-
-  _getRandState() {
-    var randIndex = utils.getRandomNumber(0, 1);
-    return this.states[randIndex];
   }
 
 }

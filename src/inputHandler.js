@@ -10,6 +10,8 @@ var handler = {
     this.availableEvents.forEach(eventName => {
       this.events[eventName] = [];
     });
+
+    document.addEventListener('keydown', handler.onKeydown.bind(handler));
   },
 
   _dispatchEvent(eventName, obj) {
@@ -34,6 +36,5 @@ var handler = {
 }
 
 handler._start();
-document.addEventListener('keydown', handler.onKeydown.bind(handler));
 
 export default handler
