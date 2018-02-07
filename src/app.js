@@ -9,9 +9,12 @@ import duckHandler from './duckHandler'
 
 var mapLength = 50;
 var numDucks = 5;
+var ducksMaxRespawnTurns = 100;
 
 var map = {};
 var mark = {};
+
+var turnCount = 0;
 
 start();
 
@@ -23,7 +26,7 @@ function start() {
   // start the game objects
   map = new Map(mapLength);
   mark = new Mark(0);
-  duckHandler.start(numDucks, mapLength);
+  duckHandler.start(numDucks, mapLength, ducksMaxRespawnTurns);
 
   // handle user inputs
   inputHandler.addEventListener('move', onUserMove);
@@ -33,9 +36,10 @@ function start() {
 }
 
 function loop(timeStamp) {
+  turnCount++;
 
   // update game objects
-  duckHandler.updateDucks();
+  duckHandler.updateDucks(turnCount);
   mark.target = duckHandler.locateDuck(mark.position);
   mark.update();
 

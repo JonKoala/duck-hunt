@@ -3,10 +3,11 @@ import Duck from './models/duck'
 
 export default {
 
-  start(numDucks, mapLength) {
+  start(numDucks, mapLength, duckRespawnTurns) {
 
     this.mapLength = mapLength;
     this.numDucks = numDucks;
+    this.maxRespawnTurns = duckRespawnTurns;
 
     // start ducks
     this.ducks = [];
@@ -24,16 +25,18 @@ export default {
     this.ducks.splice(index, 1);
   },
 
-  updateDucks() {
+  updateDucks(turnCount) {
+
+    // ducks collision and pseudo AI logic
     this.ducks.forEach(duck => {
       if (duck.state === 'walking') {
 
-        // predict duck's next moviment
+        // define duck's next moviment
         let nextOrientation = this.getRandomOrientation();
         let nextMoviment = this.getRandomMoviment();
         let nextPosition = duck.predictPosition(nextOrientation, nextMoviment);
 
-        // change moviment, if it's going to colide with other duck
+        // change moviment, if it's going to collide with another duck
         if (nextPosition < 0 || nextPosition > this.mapLength || this.checkCollision(nextPosition))
           nextMoviment = 0;
 
@@ -41,6 +44,10 @@ export default {
       }
       duck.update();
     });
+
+    // respawn logic
+    if (this.ducks.length < this.numDucks && !(turnCount % this.maxRespawnTurns))
+      this.addDuck();
   },
 
 
