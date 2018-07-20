@@ -3,7 +3,7 @@ import GameObject from './_gameObject'
 export default class extends GameObject {
 
   static get spritesheet() {
-    return ['(  )', '(2)', '(S)', '(x)'];
+    return ['(__)', '(2)', '(S)', '(x)'];
   }
 
   static get states() {

@@ -26,11 +26,11 @@ var handler = {
   },
 
   onKeydown(e) {
-    if (event.key === 'ArrowRight')
+    if (e.key === 'ArrowRight')
       this._dispatchEvent('move', {direction: 1});
-    if (event.key === 'ArrowLeft')
+    if (e.key === 'ArrowLeft')
       this._dispatchEvent('move', {direction: -1});
-    if (event.key === ' ')
+    if (e.key === ' ')
       this._dispatchEvent('shoot');
   }
 }
