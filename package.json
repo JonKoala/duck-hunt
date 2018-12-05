@@ -1,16 +1,19 @@
 {
   "name": "duck-hunt",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "a url based duck hunt game",
-  "main": "app.js",
-  "scripts": {
-    "dev": "webpack-dev-server --open",
-    "build": "webpack --progress"
-  },
-  "author": "JonKoala",
+  "author": "Victor Lemos @jonkoala",
   "license": "MIT",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --open --hot --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
   "devDependencies": {
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.0"
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.27.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   }
 }
