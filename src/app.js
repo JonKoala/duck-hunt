@@ -1,84 +1,79 @@
+import DuckHandler from './DuckHandler'
+import InputHandler from './InputHandler'
 import Map from './models/map'
-import Mark from './models/mark';
-
-import inputHandler from './inputHandler'
-import duckHandler from './duckHandler'
+import Mark from './models/mark'
 
 
 // start assets
 
-var mapLength = 50;
-var numDucks = 5;
-var ducksMaxRespawnTurns = 100;
+var mapLength = 100
+var numDucks = 5
+var ducksMaxRespawnTurns = 100
 
-var map = {};
-var mark = {};
+var map = {}
+var mark = {}
 
-var turnCount = 0;
+var turnCount = 0
 
-start();
+var duckHandler = {}
+var inputHandler = {}
+
+start()
 
 
 // game routine logic
 
-function start() {
+function start () {
 
-  // start the game objects
-  map = new Map(mapLength);
-  mark = new Mark(0);
-  duckHandler.start(numDucks, mapLength, ducksMaxRespawnTurns);
+  map = new Map(mapLength)
+  mark = new Mark(0)
 
-  // handle user inputs
-  inputHandler.addEventListener('move', onUserMove);
-  inputHandler.addEventListener('shoot', onUserShoot);
+  duckHandler = new DuckHandler(numDucks, mapLength, ducksMaxRespawnTurns)
 
-  loop();
+  inputHandler = new InputHandler()
+  inputHandler.addEventListener('move', onUserMove)
+  inputHandler.addEventListener('shoot', onUserShoot)
+
+  loop()
 }
 
-function loop(timeStamp) {
-  turnCount++;
+function loop (timeStamp) {
+  turnCount++
 
-  // update game objects
-  duckHandler.updateDucks(turnCount);
-  mark.target = duckHandler.locateDuck(mark.position);
-  mark.update();
+  duckHandler.updateDucks(turnCount)
+  mark.target = duckHandler.locateDuck(mark.position)
+  mark.update()
 
-  print();
+  print()
 
-  requestAnimationFrame(loop);
+  requestAnimationFrame(loop)
 }
 
-function print() {
+function print () {
 
-  // reset map
-  map.reset();
+  map.reset()
 
-  // add game objects
-  duckHandler.ducks.forEach(duck => map.addGameObject(duck));
-  map.addGameObject(mark);
+  duckHandler.ducks.forEach(duck => map.addGameObject(duck))
+  map.addGameObject(mark)
 
-  // update url
-  location.hash = map;
+  location.hash = map
 }
 
 
 // handle input events
 
-function onUserMove(e) {
-  var nextPosition = mark.predictPosition(e.direction);
+function onUserMove (e) {
+  var nextPosition = mark.predictPosition(e.direction)
   if (nextPosition >= 0 && nextPosition <= mapLength)
-    mark.move(e.direction);
+    mark.move(e.direction)
 }
 
-function onUserShoot() {
+function onUserShoot () {
 
-  // won't do anything if still in cooldown
   if (mark.state === 'cooldown')
-    return;
+    return
 
-  mark.shoot();
-
-  // kill a duck, if it's in sight
+  mark.shoot()
   if (mark.target)
-    duckHandler.killDuck(mark.target);
+    duckHandler.killDuck(mark.target)
 }

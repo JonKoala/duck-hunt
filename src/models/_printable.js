@@ -1,15 +1,16 @@
 
 export default class {
 
-  constructor() {
-    this._sprite = null;
+  constructor () {
+    this._sprite = null
   }
 
-  get sprite() {
-    return this._sprite;
+  get sprite () {
+    return this._sprite
   }
 
-  toString() {
-    return this.sprite.toString();
+  toString () {
+    return this.sprite.toString()
   }
+
 }

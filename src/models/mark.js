@@ -2,57 +2,50 @@ import GameObject from './_gameObject'
 
 export default class extends GameObject {
 
-  static get spritesheet() {
-    return ['(__)', '(2)', '(S)', '(x)'];
-  }
+  constructor (position) {
+    super(position, 0, 'normal')
 
-  static get states() {
-    return ['normal', 'cooldown'];
-  }
-
-  constructor(position) {
-    super(position, 0, 'normal');
-
-    this.cooldownTurns = 20;
+    this.spritesheet = ['(..)', '(2)', '(S)', '(x)']
+    this.cooldownTurns = 20
   }
 
 
   // state management
 
-  changeState(state) {
-    this.state = state;
+  changeState (state) {
+    super.changeState(state)
 
     switch(state) {
       case 'normal':
-        this.behaviour = this.normalBehaviour;
-        break;
+        this.behaviour = this.normalBehaviour
+        break
       case 'cooldown':
-        this.cooldownTurnsCount = 0;
-        this.behaviour = this.cooldownBehaviour;
-        break;
+        this.cooldownTurnsCount = 0
+        this.behaviour = this.cooldownBehaviour
+        break
     }
   }
 
-  normalBehaviour() {
+  normalBehaviour () {
+    this.spriteIndex = 0
+
     if (this.target)
-      this.spriteIndex = (this.target.orientation > 0) ? 2 : 1;
-    else
-      this.spriteIndex = 0;
+      this.spriteIndex = (this.target.orientation > 0) ? 2 : 1
   }
 
-  cooldownBehaviour() {
-    this.spriteIndex = 3;
+  cooldownBehaviour () {
+    this.spriteIndex = 3
 
-    this.cooldownTurnsCount++;
+    this.cooldownTurnsCount++
     if (this.cooldownTurns <= this.cooldownTurnsCount)
-      this.changeState('normal');
+      this.changeState('normal')
   }
 
 
   // events
 
-  shoot() {
-    this.changeState('cooldown');
+  shoot () {
+    this.changeState('cooldown')
   }
 
 }
