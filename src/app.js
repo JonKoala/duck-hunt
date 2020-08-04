@@ -1,5 +1,5 @@
-import DuckHandler from './DuckHandler'
-import InputHandler from './InputHandler'
+import DuckHandler from './duckHandler'
+import InputHandler from './inputHandler'
 import Map from './models/map'
 import Mark from './models/mark'
 
