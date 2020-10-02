@@ -5,7 +5,7 @@ export default class extends GameObject {
   constructor (position) {
     super(position, 0, 'normal')
 
-    this.spritesheet = ['(..)', '(2)', '(S)', '(x)']
+    this.spritesheet = ['(..)', '(2)', '(S)', '(X)']
     this.cooldownTurns = 20
   }
 
