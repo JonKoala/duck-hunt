@@ -1,4 +1,4 @@
-import Game from '../lib/game.js'
+import DuckHunt from '../lib/game.js'
 
-var game = new Game()
+const game = new DuckHunt()
 game.start()

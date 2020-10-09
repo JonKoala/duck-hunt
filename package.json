@@ -1,14 +1,19 @@
 {
   "name": "duck-hunt",
   "version": "1.0.0",
-  "description": "a url based duck hunt game",
+  "description": "a duck hunt game to play on your url",
   "author": "Victor Lemos @jonkoala",
   "license": "MIT",
+  "homepage": "https://github.com/JonKoala/duck-hunt",
   "repository": {
     "type": "git",
     "url": "https://github.com/JonKoala/duck-hunt.git"
   },
-  "homepage": "https://github.com/JonKoala/duck-hunt",
+  "keywords": [
+    "duck",
+    "game",
+    "url"
+  ],
   "main": "lib/game.js",
   "scripts": {
     "build": "babel src -d lib --source-maps",
